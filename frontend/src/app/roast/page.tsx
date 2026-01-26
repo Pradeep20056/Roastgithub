@@ -7,8 +7,17 @@ export default function RoastPage() {
   const [roast, setRoast] = useState("");
 
   const handleSubmit = async () => {
-    const res = await roastGithub(username);
-    setRoast(res?.roast || "No roast found 😅");
+    try {
+      const res = await roastGithub(username);
+      setRoast(res?.roast || "No roast found 😅");
+    } catch (error: any) {
+      console.error("Roast error:", error);
+      if (error.response && error.response.data && error.response.data.detail) {
+        setRoast(`Error: ${error.response.data.detail} 🙅‍♂️`);
+      } else {
+        setRoast("Something went wrong! Is the backend running? 🔌");
+      }
+    }
   };
 
   return (
