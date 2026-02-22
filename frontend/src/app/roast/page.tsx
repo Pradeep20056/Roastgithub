@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { roastGithub } from "@/lib/api";
+import axios from "axios";
 
 export default function RoastPage() {
   const [username, setUsername] = useState("");
@@ -10,9 +11,9 @@ export default function RoastPage() {
     try {
       const res = await roastGithub(username);
       setRoast(res?.roast || "No roast found 😅");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Roast error:", error);
-      if (error.response && error.response.data && error.response.data.detail) {
+      if (axios.isAxiosError(error) && error.response?.data?.detail) {
         setRoast(`Error: ${error.response.data.detail} 🙅‍♂️`);
       } else {
         setRoast("Something went wrong! Is the backend running? 🔌");

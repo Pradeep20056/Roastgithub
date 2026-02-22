@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { roastGithub } from "../lib/api";
+import axios from "axios";
 
 export default function RoastForm({ setRoast }: { setRoast: (r: string) => void }) {
   const [username, setUsername] = useState("");
@@ -13,12 +14,12 @@ export default function RoastForm({ setRoast }: { setRoast: (r: string) => void 
     try {
       const res = await roastGithub(username, intensity);
       setRoast(res?.roast || "Something went wrong 😅");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Roast error:", error);
-      if (error.response && error.response.data && error.response.data.detail) {
+      if (axios.isAxiosError(error) && error.response?.data?.detail) {
         setRoast(`Error: ${error.response.data.detail} 🙅‍♂️`);
       } else {
-        setRoast("Something went wrong! Is the backend running? �");
+        setRoast("Something went wrong! Is the backend running? ");
       }
     }
     setLoading(false);
@@ -39,7 +40,7 @@ export default function RoastForm({ setRoast }: { setRoast: (r: string) => void 
 
         <select
           value={intensity}
-          onChange={(e) => setIntensity(e.target.value as any)}
+          onChange={(e) => setIntensity(e.target.value as "mild" | "medium" | "savage")}
           className="w-full mt-3 p-2 rounded bg-gray-700 text-white"
         >
           <option value="mild">Mild 😇</option>
