@@ -8,6 +8,7 @@ def fetch_github_data(username: str):
     user = user_resp.json()
     repos_resp = requests.get(f"https://api.github.com/users/{username}/repos?per_page=30")
     repos = repos_resp.json()
+    print(repos)
 
     languages = {}
     for r in repos:

@@ -79,10 +79,12 @@ async def roast_github(req: RoastRequest):
     username = req.username.strip()
     if not username:
         raise HTTPException(status_code=400, detail="Username is required")
+    print(username)
 
     summary, error = fetch_github_data(username)
     if error:
         raise HTTPException(status_code=404, detail=error)
+
 
     roast = generate_gemini_roast(summary, req.intensity)
     return {"roast": roast}
