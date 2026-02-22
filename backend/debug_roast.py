@@ -1,6 +1,6 @@
 import requests
 try:
-    resp = requests.post("https://roast-my-profile-backend.onrender.com/api/roast/github", json={"username": "octocat"})
+    resp = requests.post("https://roastgithub.onrender.com/api/roast/github", json={"username": "octocat"})
     data = resp.json()
     with open("error.log", "w", encoding="utf-8") as f:
         f.write(data.get("roast", "No roast field"))
