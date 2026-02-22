@@ -2,6 +2,7 @@ import requests
 
 def fetch_github_data(username: str):
     user_resp = requests.get(f"https://api.github.com/users/{username}")
+    print(user_resp)
     if user_resp.status_code != 200:
         return None, "User not found"
 
