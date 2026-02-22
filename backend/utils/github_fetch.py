@@ -1,13 +1,21 @@
 import requests
+import os
 
 def fetch_github_data(username: str):
-    user_resp = requests.get(f"https://api.github.com/users/{username}")
+    token = os.getenv("GITHUB_TOKEN")
+    headers = {
+        "Accept": "application/vnd.github+json"
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    user_resp = requests.get(f"https://api.github.com/users/{username}", headers=headers)
     print(user_resp)
     if user_resp.status_code != 200:
         return None, "User not found"
 
     user = user_resp.json()
-    repos_resp = requests.get(f"https://api.github.com/users/{username}/repos?per_page=30")
+    repos_resp = requests.get(f"https://api.github.com/users/{username}/repos?per_page=30", headers=headers)
     repos = repos_resp.json()
     print(repos)
 

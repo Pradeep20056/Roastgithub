@@ -1,4 +1,5 @@
 import os
+import requests
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -92,3 +93,15 @@ async def roast_github(req: RoastRequest):
 @app.get("/")
 async def root():
     return {"message": "Roast My Profile (Gemini) running!"}
+
+@app.get("/api/test-rate")
+async def test_rate():
+    token = os.getenv("GITHUB_TOKEN")
+    headers = {
+        "Accept": "application/vnd.github+json"
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    
+    r = requests.get("https://api.github.com/rate_limit", headers=headers)
+    return r.json()
